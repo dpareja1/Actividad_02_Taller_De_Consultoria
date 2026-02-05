@@ -7,6 +7,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.utils import ImageReader
 import plotly.io as pio
 import io
 import sys
@@ -131,7 +132,9 @@ def insertar_grafico_plotly(fig, story, caption, width=450, height=250):
         try:
             print(f"[DEBUG] Insertando imagen en PDF (método: {metodo_exitoso})...", file=sys.stderr)
             img_buffer = io.BytesIO(img_bytes)
-            img_pdf = Image(img_buffer, width=width, height=height)
+            img_buffer.seek(0)
+            img_reader = ImageReader(img_buffer)
+            img_pdf = Image(img_reader, width=width, height=height)
             img_pdf.hAlign = 'CENTER'
             
             story.append(Spacer(1, 12))
