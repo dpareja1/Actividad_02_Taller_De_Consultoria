@@ -15,7 +15,30 @@ import tempfile
 import os
 
 
+def _configure_kaleido_chrome():
+
+    chrome_candidates = [
+        os.environ.get("PLOTLY_CHROME_PATH"),
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta",
+        "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+        "/Applications/Chromium.app/Contents/MacOS/Chromium"
+    ]
+
+    chrome_path = next((p for p in chrome_candidates if p and os.path.exists(p)), None)
+    if chrome_path:
+        try:
+            pio.kaleido.scope.chromium = chrome_path
+            print(f"[DEBUG] Kaleido usando Chrome: {chrome_path}", file=sys.stderr)
+        except Exception as e:
+            print(f"[DEBUG] No se pudo configurar ruta de Chrome en Kaleido: {e}", file=sys.stderr)
+    else:
+        print("[DEBUG] No se encontró Chrome/Chromium en rutas conocidas.", file=sys.stderr)
+
+
 def _plotly_to_png_bytes(fig, width, height):
+
+    _configure_kaleido_chrome()
 
     img_bytes = None
     metodo_exitoso = None
