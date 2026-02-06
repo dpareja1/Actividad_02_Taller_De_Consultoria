@@ -107,6 +107,7 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
     cols_texto = df_trans.select_dtypes(include=['object', 'string']).columns
          
     for col in cols_texto:
+        df_trans[col] = df_trans[col].fillna('').astype(str)
         # A. Convertir a minúsculas
         df_trans[col] = df_trans[col].str.lower()
         
@@ -209,5 +210,6 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
   
 
     return df_trans, metricas
+
 
 
