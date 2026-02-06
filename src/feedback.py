@@ -71,8 +71,8 @@ def procesar_feedback(ruta_csv):
     soporte_raw = df_feedback["Ticket_Soporte_Abierto"].astype(str).str.strip().str.upper()
     
     mapeo_soporte = {
-        'SÍ': 1, 'SI': 1, '1': 1, '1.0': 1, 'TRUE': 1,
-        'NO': 0, '0': 0, '0.0': 0, 'FALSE': 0, 'NAN': 0
+        'SÍ': 'si', 'SI': 'si', '1': 'si', '1.0': 'si', 'TRUE': 'si',
+        'NO': 'no', '0': 'no', '0.0': 'no', 'FALSE': 'no', 'NAN': 'no'
     }
     
     df_feedback["Ticket_Soporte"] = soporte_raw.map(mapeo_soporte).fillna(0).astype(int)
@@ -114,3 +114,4 @@ def calcular_health_score(df):
     score = 100 * (1 - (0.7 * porcentaje_nulos + 0.3 * porcentaje_duplicados))
 
     return round(score, 2), round(porcentaje_nulos * 100, 2), round(porcentaje_duplicados * 100, 2)
+
