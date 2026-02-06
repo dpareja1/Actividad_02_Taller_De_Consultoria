@@ -91,6 +91,7 @@ def procesar_feedback(ruta_csv):
     cols_texto = df_feedback.select_dtypes(include=['object', 'string']).columns
      
     for col in cols_texto:
+        df_feedback[col] = df_feedback[col].fillna('').astype(str)
         # A. Convertir a minúsculas
         df_feedback[col] = df_feedback[col].str.lower()
         
@@ -114,4 +115,5 @@ def calcular_health_score(df):
     score = 100 * (1 - (0.7 * porcentaje_nulos + 0.3 * porcentaje_duplicados))
 
     return round(score, 2), round(porcentaje_nulos * 100, 2), round(porcentaje_duplicados * 100, 2)
+
 
