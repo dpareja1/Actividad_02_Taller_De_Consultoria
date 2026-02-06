@@ -30,11 +30,12 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
     # ==========================================
     # PASO 5: IMPUTACIÓN CONDICIONAL DE ESTADO_ENVIO
     # ==========================================
+    
     # Estrategia: Usar información de feedback para inferir estado de envío
 
     # Paso 5a: Transacciones SIN ticket de soporte -> "entregado"
     # (clientes sin problemas, no abrieron ticket)
-    transacciones_nps_no = df_feedback[df_feedback['Ticket_Soporte_Abierto'] == 0]['Transaccion_ID'].unique()
+    transacciones_nps_no = df_feedback[df_feedback['Ticket_Soporte'] == 0]['Transaccion_ID'].unique()
 
     condicion_existe = df_trans['Transaccion_ID'].isin(transacciones_nps_no)
     condicion_vacio = df_trans['Estado_Envio'].isna()
@@ -43,7 +44,7 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
 
     # Paso 5b: Transacciones CON ticket de soporte abierto -> "devuelto"
     # (clientes con problemas, abrieron ticket)
-    transacciones_nps_si = df_feedback[df_feedback['Ticket_Soporte_Abierto'] == 1]['Transaccion_ID'].unique()
+    transacciones_nps_si = df_feedback[df_feedback['Ticket_Soporte'] == 1]['Transaccion_ID'].unique()
 
     condicion_existe = df_trans['Transaccion_ID'].isin(transacciones_nps_si)
     condicion_vacio = df_trans['Estado_Envio'].isna()
@@ -186,6 +187,7 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
   
 
     return df_trans, metricas
+
 
 
 
