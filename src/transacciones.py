@@ -106,18 +106,18 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
 
     cols_texto = df_trans.select_dtypes(include=['object', 'string']).columns
          
-        for col in cols_texto:
-            # A. Convertir a minúsculas
-            df_trans[col] = df_trans[col].str.lower()
-            
-            # B. Eliminar tildes (Normalización Unicode)
-            # Explicación técnica: 
-            # 'NFKD' separa la letra de la tilde (á -> a + ´). 
-            # 'encode' elimina los caracteres no ASCII (la tilde suelta).
-            # 'decode' devuelve el texto a string legible.
-            df_trans[col] = df_trans[col].str.normalize('NFKD')\
-                             .str.encode('ascii', errors='ignore')\
-                             .str.decode('utf-8')
+    for col in cols_texto:
+        # A. Convertir a minúsculas
+        df_trans[col] = df_trans[col].str.lower()
+        
+        # B. Eliminar tildes (Normalización Unicode)
+        # Explicación técnica: 
+        # 'NFKD' separa la letra de la tilde (á -> a + ´). 
+        # 'encode' elimina los caracteres no ASCII (la tilde suelta).
+        # 'decode' devuelve el texto a string legible.
+        df_trans[col] = df_trans[col].str.normalize('NFKD')\
+                         .str.encode('ascii', errors='ignore')\
+                         .str.decode('utf-8')
 
     
     # ==========================================
@@ -209,4 +209,5 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
   
 
     return df_trans, metricas
+
 
