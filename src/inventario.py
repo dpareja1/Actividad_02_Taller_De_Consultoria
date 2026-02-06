@@ -165,22 +165,8 @@ def procesar_inventario(inventario_path: str) -> tuple:
         "rango_costos_final": f"${df_inventario['Costo_Unitario_USD'].min():.2f} - ${df_inventario['Costo_Unitario_USD'].max():.2f}"
     }
 
-    cols_texto = df_inventario.select_dtypes(include=['object', 'string']).columns
-     
-    for col in cols_texto:
-        df_inventario[col] = df_inventario[col].fillna('').astype(str)
-        # A. Convertir a minúsculas
-        df_inventario[col] = df_inventario[col].str.lower()
-        
-        # B. Eliminar tildes (Normalización Unicode)
-        # Explicación técnica: 
-        # 'NFKD' separa la letra de la tilde (á -> a + ´). 
-        # 'encode' elimina los caracteres no ASCII (la tilde suelta).
-        # 'decode' devuelve el texto a string legible.
-        df_inventario[col] = df_inventario[col].str.normalize('NFKD')\
-                         .str.encode('ascii', errors='ignore')\
-                         .str.decode('utf-8')
-    
+      
 
     return df_inventario, metricas
+
 
