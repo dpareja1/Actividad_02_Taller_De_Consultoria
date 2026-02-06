@@ -62,8 +62,8 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
     # ==========================================
     # Mapeo de abreviaturas a nombres completos
     dic_ciudades = {
-        "bog": "bogotá", "bogota": "bogotá",
-        "med": "medellín", "medellin": "medellín",
+        "bog": "bogota", "bogota": "bogota",
+        "med": "medellin", "medellin": "medellin",
         "baq": "barranquilla", "barranquilla": "barranquilla",
         "ventas_web": "canal digital" 
     }
@@ -104,6 +104,22 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
         how='left'                                     # Left join
     )
 
+    cols_texto = df_trans.select_dtypes(include=['object', 'string']).columns
+         
+        for col in cols_texto:
+            # A. Convertir a minúsculas
+            df_trans[col] = df_trans[col].str.lower()
+            
+            # B. Eliminar tildes (Normalización Unicode)
+            # Explicación técnica: 
+            # 'NFKD' separa la letra de la tilde (á -> a + ´). 
+            # 'encode' elimina los caracteres no ASCII (la tilde suelta).
+            # 'decode' devuelve el texto a string legible.
+            df_trans[col] = df_trans[col].str.normalize('NFKD')\
+                             .str.encode('ascii', errors='ignore')\
+                             .str.decode('utf-8')
+
+    
     # ==========================================
     # PASO 10: CREACIÓN DE IDENTIFICADOR GRUPAL
     # ==========================================
@@ -186,24 +202,11 @@ def procesar_transacciones(ruta_csv, df_inventario, df_feedback):
         "health_score_antes": salud_antes[0],
         "health_score_despues": salud_despues[0],
         "total_transacciones": len(df_trans),
-        # "tiempos_outliers": tiempos_outliers,
         "skus_sin_inventario": skus_sin_inventario
     }
     
-    cols_texto = df_trans.select_dtypes(include=['object', 'string']).columns
-     
-    for col in cols_texto:
-        # A. Convertir a minúsculas
-        df_trans[col] = df_trans[col].str.lower()
-        
-        # B. Eliminar tildes (Normalización Unicode)
-        # Explicación técnica: 
-        # 'NFKD' separa la letra de la tilde (á -> a + ´). 
-        # 'encode' elimina los caracteres no ASCII (la tilde suelta).
-        # 'decode' devuelve el texto a string legible.
-        df_trans[col] = df_trans[col].str.normalize('NFKD')\
-                         .str.encode('ascii', errors='ignore')\
-                         .str.decode('utf-8')
+    
   
 
     return df_trans, metricas
+
