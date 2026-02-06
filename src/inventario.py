@@ -168,6 +168,7 @@ def procesar_inventario(inventario_path: str) -> tuple:
     cols_texto = df_inventario.select_dtypes(include=['object', 'string']).columns
      
     for col in cols_texto:
+        df_inventario[col] = df_inventario[col].fillna('').astype(str)
         # A. Convertir a minúsculas
         df_inventario[col] = df_inventario[col].str.lower()
         
@@ -182,3 +183,4 @@ def procesar_inventario(inventario_path: str) -> tuple:
     
 
     return df_inventario, metricas
+
