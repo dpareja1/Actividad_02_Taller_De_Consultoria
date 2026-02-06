@@ -130,6 +130,23 @@ def inject_global_styles() -> None:
             background: #ffffff;
             color: var(--primary);
         }
+
+        /* KPI percentage emphasis */
+        .kpi-percentage {
+            margin-top: 0.35rem;
+            padding: 0.35rem 0.6rem;
+            display: inline-block;
+            border-radius: 999px;
+            background: rgba(0, 161, 214, 0.12);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.2px;
+        }
+        .kpi-percentage.risk {
+            background: rgba(231, 76, 60, 0.12);
+            color: #c0392b;
+        }
         </style>
         """,
         unsafe_allow_html=True

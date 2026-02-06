@@ -20,12 +20,20 @@ def mostrar_resumen_ejecutivo(df_filtrado, health_scores, metricas_calidad):
     with col2:
         margen_total = df_filtrado["margen_real"].sum()
         margen_pct = (margen_total / ingresos_totales * 100) if ingresos_totales != 0 else 0
-        st.metric("📊 Margen Neto", f"${margen_total:,.0f} ({margen_pct:.1f}%)")
+        st.metric("📊 Margen Neto", f"${margen_total:,.0f}")
+        st.markdown(
+            f"<div class='kpi-percentage'>{margen_pct:.1f}%</div>",
+            unsafe_allow_html=True
+        )
     
     with col3:
         ventas_sin_inventario = df_filtrado["venta_sin_inventario"].sum()
         pct_riesgo = (ventas_sin_inventario / len(df_filtrado) * 100) if len(df_filtrado) > 0 else 0
-        st.metric("👻 Ventas Sin Inventario", f"{ventas_sin_inventario:,} ({pct_riesgo:.1f}% Riesgo)")
+        st.metric("👻 Ventas Sin Inventario", f"{ventas_sin_inventario:,}")
+        st.markdown(
+            f"<div class='kpi-percentage risk'>{pct_riesgo:.1f}% Riesgo</div>",
+            unsafe_allow_html=True
+        )
     
     with col4:
         margen_negativo = (df_filtrado["margen_real"] < 0).sum()
